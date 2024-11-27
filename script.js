@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const imageSelect = document.getElementById("image-select");
   let tiles = [];
 
-  // Set the default image set based on the initial dropdown value
   let currentImageSet = imageSelect.value;
 
   function initializeGame() {
