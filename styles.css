@@ -59,3 +59,47 @@ main {
   border: none;
   cursor: default;
 }
+
+/* Controls Section */
+#controls {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#image-select {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid lightsalmon;
+  border-radius: 5px;
+  background-color: white;
+  color: lightsalmon;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+  font-weight: bold;
+}
+
+#image-select:hover {
+  background-color: lightsalmon;
+  color: white;
+}
+
+#shuffle {
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: lightsalmon;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s, transform 0.3s;
+  font-weight: bold;
+}
+
+#shuffle:hover {
+  background-color: tomato;
+  transform: scale(1.1);
+}

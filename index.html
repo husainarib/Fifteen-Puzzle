@@ -10,11 +10,17 @@
       <h1>Fifteen Puzzle Game</h1>
     </header>
     <main>
+      <div id="controls">
+        <label for="image-select">Choose an image:</label>
+        <select id="image-select">
+          <option value="image1">Image 1</option>
+          <option value="image2">Image 2</option>
+          <option value="image3">Image 3</option>
+        </select>
+        <button id="shuffle">Shuffle</button>
+      </div>
       <div id="game-container">
         <div id="grid"></div>
-      </div>
-      <div id="controls">
-        <button id="shuffle">Shuffle</button>
       </div>
     </main>
     <footer>
