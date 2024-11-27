@@ -2,18 +2,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const grid = document.getElementById("grid");
   const shuffleButton = document.getElementById("shuffle");
   const imageSelect = document.getElementById("image-select");
+  const timerDisplay = document.getElementById("timer");
+  const movesDisplay = document.getElementById("moves");
   let tiles = [];
-
-  let currentImageSet = imageSelect.value;
+  let timerInterval;
+  let secondsElapsed = 0;
+  let moveCount = 0;
 
   function initializeGame() {
-    tiles = Array.from({ length: 15 }, (_, i) => i + 1); 
+    tiles = Array.from({ length: 15 }, (_, i) => i + 1);
     renderTiles();
+    resetTimer();
+    resetMoves();
   }
 
   function shuffleTiles() {
-    tiles = shuffle([...tiles]); 
+    tiles = shuffle([...tiles]);
     renderTiles();
+    resetTimer();
+    resetMoves();
+    startTimer();
   }
 
   function shuffle(array) {
@@ -25,8 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderTiles() {
-    grid.innerHTML = ""; 
+    grid.innerHTML = "";
     const flatTiles = [...tiles, ""];
+    const currentImageSet = imageSelect.value;
 
     for (let i = 0; i < 16; i++) {
       const tileElement = document.createElement("div");
@@ -40,20 +49,44 @@ document.addEventListener("DOMContentLoaded", () => {
         tileElement.style.backgroundPosition = "center";
       }
 
+      tileElement.addEventListener("click", () => {
+        if (flatTiles[i] !== "") {
+          moveCount++;
+          movesDisplay.textContent = `Moves: ${moveCount}`;
+        }
+      });
+
       grid.appendChild(tileElement);
     }
   }
 
-  // Update the image set when the user selects a different option
-  imageSelect.addEventListener("change", (e) => {
-    currentImageSet = e.target.value;
+  function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    secondsElapsed = 0;
+    timerInterval = setInterval(() => {
+      secondsElapsed++;
+      timerDisplay.textContent = `Time: ${secondsElapsed}s`;
+    }, 1000);
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    secondsElapsed = 0;
+    timerDisplay.textContent = "Time: 0s";
+  }
+
+  function resetMoves() {
+    moveCount = 0;
+    movesDisplay.textContent = "Moves: 0";
+  }
+
+  shuffleButton.addEventListener("click", shuffleTiles);
+  imageSelect.addEventListener("change", () => {
     initializeGame();
   });
 
-  shuffleButton.addEventListener("click", shuffleTiles);
-
-  // Initialize the game with the selected image set
   initializeGame();
 });
+
 
 

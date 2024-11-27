@@ -106,3 +106,24 @@ main {
   background-color: tomato;
   transform: scale(1.1);
 }
+
+#info {
+  position: absolute;
+  top: 10px;  
+  right: 10px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  width: 200px;  
+  padding: 10px;
+  background-color: lightsalmon;
+  border-radius: 10px;
+  color: white;
+}
+
+#timer, #moves {
+  padding: 5px 10px;
+  font-size: 20px;
+}
