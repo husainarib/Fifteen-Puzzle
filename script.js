@@ -1,18 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
   const grid = document.getElementById("grid");
   const shuffleButton = document.getElementById("shuffle");
+  const imageSelect = document.getElementById("image-select");
   let tiles = [];
 
-  // Initialize the game
+  // Set the default image set based on the initial dropdown value
+  let currentImageSet = imageSelect.value;
+
   function initializeGame() {
-    // Create the initial tiles
-    tiles = Array.from({ length: 15 }, (_, i) => i + 1);
+    tiles = Array.from({ length: 15 }, (_, i) => i + 1); 
     renderTiles();
   }
 
-  // Shuffle tiles
   function shuffleTiles() {
-    tiles = shuffle([...tiles]);
+    tiles = shuffle([...tiles]); 
     renderTiles();
   }
 
@@ -24,24 +25,36 @@ document.addEventListener("DOMContentLoaded", () => {
     return array;
   }
 
-  // Render the tiles on the grid
   function renderTiles() {
-    grid.innerHTML = "";
+    grid.innerHTML = ""; 
     const flatTiles = [...tiles, ""];
+
     for (let i = 0; i < 16; i++) {
       const tileElement = document.createElement("div");
       tileElement.className = "tile";
+
       if (flatTiles[i] === "") {
         tileElement.classList.add("empty");
       } else {
-        tileElement.textContent = flatTiles[i];
+        tileElement.style.backgroundImage = `url('img/${currentImageSet}/${currentImageSet}${flatTiles[i]}.jpg')`;
+        tileElement.style.backgroundSize = "cover";
+        tileElement.style.backgroundPosition = "center";
       }
+
       grid.appendChild(tileElement);
     }
   }
 
+  // Update the image set when the user selects a different option
+  imageSelect.addEventListener("change", (e) => {
+    currentImageSet = e.target.value;
+    initializeGame();
+  });
+
   shuffleButton.addEventListener("click", shuffleTiles);
 
-  // Start the game
+  // Initialize the game with the selected image set
   initializeGame();
 });
+
+

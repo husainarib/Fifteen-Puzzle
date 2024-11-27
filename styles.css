@@ -52,12 +52,15 @@ main {
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.3s ease;
+  background-size: cover;
+  background-position: center;
 }
 
 .tile.empty {
   background-color: transparent;
   border: none;
   cursor: default;
+  background-image: none;
 }
 
 /* Controls Section */
