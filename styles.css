@@ -58,6 +58,7 @@ main {
   top: 5px;
   left: 5px;
   color: white;
+  background-color: rgba(0, 0, 0, 0.5);
   font-size: 24px;
   border-radius: 5px;
   font-weight: bold;
@@ -204,4 +205,12 @@ main {
 
 .close-btn:hover {
   background: #d43f3f;
+}
+
+.congrats-image {
+  width: 200px; 
+  height: 200px;
+  margin-top: 10px;
+  background-color: #f0f0f0; 
+  border: 2px solid #ccc; 
 }

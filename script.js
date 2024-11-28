@@ -121,20 +121,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showCongratulatoryMessage() {
-    const modal = document.getElementById("modal"); // Get modal element (already created in HTML)
+    const modal = document.getElementById("modal"); 
     const message = document.getElementById("congrats-message");
+    const imageContainer = document.getElementById("congrats-image"); 
+    const currentImageSet = imageSelect.value;
   
-    // Update the message content
     message.textContent = `It took you ${secondsElapsed} seconds and ${moveCount} moves to complete the puzzle!`;
+   
+    const fullImagePath = `url('img/${currentImageSet}/${currentImageSet}.jpg')`;
   
-    // Show the modal
-    modal.style.display = "block"; // Show modal
-    
-    // Add an event listener to the close button to close the modal
+    imageContainer.style.backgroundImage = fullImagePath;
+    imageContainer.style.backgroundSize = "cover";
+    imageContainer.style.backgroundPosition = "center";
+  
+
+    modal.style.display = "block";
+  
     const closeBtn = modal.querySelector(".close-btn");
     closeBtn.addEventListener("click", () => {
-      modal.style.display = "none"; // Hide modal
-      initializeGame(); // Reset game
+      modal.style.display = "none"; 
+      initializeGame(); 
     });
   }
 
@@ -183,9 +189,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initializeGame();
 });
-
-
-
-
-
-
