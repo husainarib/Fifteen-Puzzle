@@ -12,10 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let secondsElapsed = 0;
   let moveCount = 0;
   let isPaused = false;
-
+  let solvedState = [...Array(15).keys()].map(x => x + 1).concat(""); // Solved state [1, 2, 3, ..., 15, ""]
+  
   function initializeGame() {
-    tiles = Array.from({ length: 15 }, (_, i) => i + 1); // Initialize tiles 1-15
-    tiles.push(""); // Add empty tile
+    tiles = [...solvedState]; // Reset to solved state
     renderTiles();
     resetTimer();
     resetMoves();
@@ -55,27 +55,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
       tileElement.appendChild(numberOverlay);
 
-      // Set the background image for the tile
+
       if (tiles[i] !== "") {
         tileElement.style.backgroundImage = `url('img/${currentImageSet}/${currentImageSet}${tiles[i]}.jpg')`;
         tileElement.style.backgroundSize = "cover";
         tileElement.style.backgroundPosition = "center";
       } else {
-        tileElement.classList.add("empty"); // Empty tile for the space
+        tileElement.classList.add("empty"); 
       }
 
       tileElement.addEventListener("click", () => {
-        if (isPaused || tiles[i] === "") return; // Don't allow move if paused or on empty tile
+        if (isPaused || tiles[i] === "") return; 
 
-        const emptyTileIndex = tiles.indexOf(""); // Find empty tile
-        const validMoves = getValidMoves(emptyTileIndex); // Get valid moves based on empty tile position
+        const emptyTileIndex = tiles.indexOf(""); 
+        const validMoves = getValidMoves(emptyTileIndex); 
 
         if (validMoves.includes(i)) {
-          // Swap tiles
+
           [tiles[emptyTileIndex], tiles[i]] = [tiles[i], tiles[emptyTileIndex]];
           moveCount++;
           movesDisplay.textContent = `Moves: ${moveCount}`;
-          renderTiles(); // Re-render the grid with updated tiles
+          renderTiles(); 
+          checkPuzzleSolved(); 
         }
       });
 
@@ -101,13 +102,40 @@ document.addEventListener("DOMContentLoaded", () => {
       const newCol = col + dy;
       const newIndex = newRow * 4 + newCol;
 
-      // Check if new position is within bounds
       if (newRow >= 0 && newRow < 4 && newCol >= 0 && newCol < 4) {
         validMoves.push(newIndex);
       }
     }
 
     return validMoves;
+  }
+
+  function checkPuzzleSolved() {
+
+    if (JSON.stringify(tiles) === JSON.stringify(solvedState)) {
+      stopTimer();
+      setTimeout(() => {
+        showCongratulatoryMessage();
+      }, 500);
+    }
+  }
+
+  function showCongratulatoryMessage() {
+    const modal = document.getElementById("modal"); // Get modal element (already created in HTML)
+    const message = document.getElementById("congrats-message");
+  
+    // Update the message content
+    message.textContent = `It took you ${secondsElapsed} seconds and ${moveCount} moves to complete the puzzle!`;
+  
+    // Show the modal
+    modal.style.display = "block"; // Show modal
+    
+    // Add an event listener to the close button to close the modal
+    const closeBtn = modal.querySelector(".close-btn");
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none"; // Hide modal
+      initializeGame(); // Reset game
+    });
   }
 
   function startTimer() {
@@ -139,22 +167,23 @@ document.addEventListener("DOMContentLoaded", () => {
       pauseButton.textContent = "Resume";
       stopTimer();
       overlay.style.display = "flex";
-      grid.style.pointerEvents = "none"; // Disable clicks on grid
+      grid.style.pointerEvents = "none"; 
     } else {
       pauseButton.textContent = "Pause";
       startTimer();
       overlay.style.display = "none";
-      grid.style.pointerEvents = "auto"; // Enable clicks on grid
+      grid.style.pointerEvents = "auto"; 
     }
   });
 
   shuffleButton.addEventListener("click", shuffleTiles);
   imageSelect.addEventListener("change", () => {
-    initializeGame(); // Re-initialize game if image set is changed
+    initializeGame(); 
   });
 
   initializeGame();
 });
+
 
 
 
