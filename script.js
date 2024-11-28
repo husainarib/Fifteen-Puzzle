@@ -41,17 +41,26 @@ document.addEventListener("DOMContentLoaded", () => {
     grid.innerHTML = "";
     const flatTiles = [...tiles, ""];
     const currentImageSet = imageSelect.value;
-
+  
     for (let i = 0; i < 16; i++) {
       const tileElement = document.createElement("div");
       tileElement.className = "tile";
 
-      if (flatTiles[i] === "") {
-        tileElement.classList.add("empty");
-      } else {
+      const numberOverlay = document.createElement("div");
+      numberOverlay.className = "number";
+
+      if (flatTiles[i] !== "") {
+        numberOverlay.textContent = flatTiles[i]; 
+      }
+
+      tileElement.appendChild(numberOverlay);
+
+      if (flatTiles[i] !== "") {
         tileElement.style.backgroundImage = `url('img/${currentImageSet}/${currentImageSet}${flatTiles[i]}.jpg')`;
         tileElement.style.backgroundSize = "cover";
         tileElement.style.backgroundPosition = "center";
+      } else {
+        tileElement.classList.add("empty"); 
       }
 
       tileElement.addEventListener("click", () => {
