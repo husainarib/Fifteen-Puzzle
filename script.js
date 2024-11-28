@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const movesDisplay = document.getElementById("moves");
   const pauseButton = document.getElementById("pause");
   const overlay = document.querySelector(".overlay");
+  const backgroundMusic = document.getElementById("background-music"); // Get the audio element
 
   let tiles = [];
   let timerInterval;
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTiles();
     resetTimer();
     resetMoves();
+    playMusic(); // Start playing music when the game starts
   }
 
   function shuffleTiles() {
@@ -28,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     resetTimer();
     resetMoves();
     startTimer();
+    playMusic(); // Start playing music when the game starts
   }
 
   function shuffle(array) {
@@ -55,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       tileElement.appendChild(numberOverlay);
 
-
       if (tiles[i] !== "") {
         tileElement.style.backgroundImage = `url('img/${currentImageSet}/${currentImageSet}${tiles[i]}.jpg')`;
         tileElement.style.backgroundSize = "cover";
@@ -71,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const validMoves = getValidMoves(emptyTileIndex); 
 
         if (validMoves.includes(i)) {
-
           [tiles[emptyTileIndex], tiles[i]] = [tiles[i], tiles[emptyTileIndex]];
           moveCount++;
           movesDisplay.textContent = `Moves: ${moveCount}`;
@@ -111,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function checkPuzzleSolved() {
-
     if (JSON.stringify(tiles) === JSON.stringify(solvedState)) {
       stopTimer();
       setTimeout(() => {
@@ -121,26 +121,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showCongratulatoryMessage() {
-    const modal = document.getElementById("modal"); 
+    const modal = document.getElementById("modal"); // Get modal element (already created in HTML)
     const message = document.getElementById("congrats-message");
-    const imageContainer = document.getElementById("congrats-image"); 
-    const currentImageSet = imageSelect.value;
   
+    // Update the message content
     message.textContent = `It took you ${secondsElapsed} seconds and ${moveCount} moves to complete the puzzle!`;
-   
-    const fullImagePath = `url('img/${currentImageSet}/${currentImageSet}.jpg')`;
   
-    imageContainer.style.backgroundImage = fullImagePath;
-    imageContainer.style.backgroundSize = "cover";
-    imageContainer.style.backgroundPosition = "center";
-  
-
-    modal.style.display = "block";
-  
+    // Show the modal
+    modal.style.display = "block"; // Show modal
+    
+    // Add an event listener to the close button to close the modal
     const closeBtn = modal.querySelector(".close-btn");
     closeBtn.addEventListener("click", () => {
-      modal.style.display = "none"; 
-      initializeGame(); 
+      modal.style.display = "none"; // Hide modal
+      initializeGame(); // Reset game
     });
   }
 
@@ -167,16 +161,27 @@ document.addEventListener("DOMContentLoaded", () => {
     movesDisplay.textContent = "Moves: 0";
   }
 
+  function playMusic() {
+    backgroundMusic.play(); // Play the background music when the game starts
+  }
+
+  function stopMusic() {
+    backgroundMusic.pause(); // Pause the background music when the game is paused
+    backgroundMusic.currentTime = 0; // Reset the music to start from the beginning
+  }
+
   pauseButton.addEventListener("click", () => {
     isPaused = !isPaused;
     if (isPaused) {
       pauseButton.textContent = "Resume";
       stopTimer();
+      stopMusic(); // Stop music when the game is paused
       overlay.style.display = "flex";
       grid.style.pointerEvents = "none"; 
     } else {
       pauseButton.textContent = "Pause";
       startTimer();
+      playMusic(); // Play music when the game is resumed
       overlay.style.display = "none";
       grid.style.pointerEvents = "auto"; 
     }
@@ -189,3 +194,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initializeGame();
 });
+
