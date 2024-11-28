@@ -121,22 +121,33 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showCongratulatoryMessage() {
-    const modal = document.getElementById("modal"); // Get modal element (already created in HTML)
+    const modal = document.getElementById("modal"); // Get modal element
     const message = document.getElementById("congrats-message");
-  
+    
     // Update the message content
     message.textContent = `It took you ${secondsElapsed} seconds and ${moveCount} moves to complete the puzzle!`;
   
     // Show the modal
     modal.style.display = "block"; // Show modal
+  
+    // Stop the background music and play the congrats music
+    const backgroundMusic = document.getElementById("background-music");
+    const congratsMusic = document.getElementById("congrats-music");
+  
+    backgroundMusic.pause();  // Stop background music
+    congratsMusic.play();     // Play congrats music
     
     // Add an event listener to the close button to close the modal
     const closeBtn = modal.querySelector(".close-btn");
     closeBtn.addEventListener("click", () => {
       modal.style.display = "none"; // Hide modal
       initializeGame(); // Reset game
+      congratsMusic.pause(); // Stop congrats music
+      congratsMusic.currentTime = 0; // Reset to the beginning of the music
+      backgroundMusic.play(); // Resume background music
     });
   }
+  
 
   function startTimer() {
     if (timerInterval) clearInterval(timerInterval);
