@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const movesDisplay = document.getElementById("moves");
   const pauseButton = document.getElementById("pause");
   const overlay = document.querySelector(".overlay");
-  const backgroundMusic = document.getElementById("background-music"); // Get the audio element
+  const backgroundMusic = document.getElementById("background-music"); 
 
   let tiles = [];
   let timerInterval;
@@ -14,13 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let moveCount = 0;
   let isPaused = false;
   let solvedState = [...Array(15).keys()].map(x => x + 1).concat(""); // Solved state [1, 2, 3, ..., 15, ""]
-  
+
   function initializeGame() {
     tiles = [...solvedState]; // Reset to solved state
     renderTiles();
     resetTimer();
     resetMoves();
-    playMusic(); // Start playing music when the game starts
+    stopMusic();
   }
 
   function shuffleTiles() {
@@ -63,21 +63,21 @@ document.addEventListener("DOMContentLoaded", () => {
         tileElement.style.backgroundSize = "cover";
         tileElement.style.backgroundPosition = "center";
       } else {
-        tileElement.classList.add("empty"); 
+        tileElement.classList.add("empty");
       }
 
       tileElement.addEventListener("click", () => {
-        if (isPaused || tiles[i] === "") return; 
+        if (isPaused || tiles[i] === "") return;
 
-        const emptyTileIndex = tiles.indexOf(""); 
-        const validMoves = getValidMoves(emptyTileIndex); 
+        const emptyTileIndex = tiles.indexOf("");
+        const validMoves = getValidMoves(emptyTileIndex);
 
         if (validMoves.includes(i)) {
           [tiles[emptyTileIndex], tiles[i]] = [tiles[i], tiles[emptyTileIndex]];
           moveCount++;
           movesDisplay.textContent = `Moves: ${moveCount}`;
-          renderTiles(); 
-          checkPuzzleSolved(); 
+          renderTiles();
+          checkPuzzleSolved();
         }
       });
 
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = Math.floor(emptyTileIndex / 4);
     const col = emptyTileIndex % 4;
 
-    // Directions: up, down, left, right
+    // Directions:
     const directions = [
       [-1, 0], // up
       [1, 0],  // down
@@ -121,33 +121,33 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showCongratulatoryMessage() {
-    const modal = document.getElementById("modal"); // Get modal element
+    const modal = document.getElementById("modal"); 
     const message = document.getElementById("congrats-message");
-    
+
     // Update the message content
     message.textContent = `It took you ${secondsElapsed} seconds and ${moveCount} moves to complete the puzzle!`;
-  
+
     // Show the modal
     modal.style.display = "block"; // Show modal
-  
+
     // Stop the background music and play the congrats music
     const backgroundMusic = document.getElementById("background-music");
     const congratsMusic = document.getElementById("congrats-music");
-  
-    backgroundMusic.pause();  // Stop background music
-    congratsMusic.play();     // Play congrats music
-    
+
+    backgroundMusic.pause(); 
+    congratsMusic.play();     
+
     // Add an event listener to the close button to close the modal
     const closeBtn = modal.querySelector(".close-btn");
     closeBtn.addEventListener("click", () => {
-      modal.style.display = "none"; // Hide modal
-      initializeGame(); // Reset game
-      congratsMusic.pause(); // Stop congrats music
-      congratsMusic.currentTime = 0; // Reset to the beginning of the music
-      backgroundMusic.play(); // Resume background music
+      modal.style.display = "none"; 
+      initializeGame(); 
+      congratsMusic.pause(); 
+      congratsMusic.currentTime = 0;
+      backgroundMusic.play(); 
     });
   }
-  
+
 
   function startTimer() {
     if (timerInterval) clearInterval(timerInterval);
@@ -173,12 +173,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function playMusic() {
-    backgroundMusic.play(); // Play the background music when the game starts
+    backgroundMusic.play(); 
   }
 
   function stopMusic() {
-    backgroundMusic.pause(); // Pause the background music when the game is paused
-    backgroundMusic.currentTime = 0; // Reset the music to start from the beginning
+    backgroundMusic.pause(); 
+    backgroundMusic.currentTime = 0; 
   }
 
   pauseButton.addEventListener("click", () => {
@@ -188,19 +188,20 @@ document.addEventListener("DOMContentLoaded", () => {
       stopTimer();
       stopMusic(); // Stop music when the game is paused
       overlay.style.display = "flex";
-      grid.style.pointerEvents = "none"; 
+      grid.style.pointerEvents = "none";
     } else {
       pauseButton.textContent = "Pause";
       startTimer();
       playMusic(); // Play music when the game is resumed
       overlay.style.display = "none";
-      grid.style.pointerEvents = "auto"; 
+      grid.style.pointerEvents = "auto";
     }
   });
 
   shuffleButton.addEventListener("click", shuffleTiles);
   imageSelect.addEventListener("change", () => {
-    initializeGame(); 
+    stopMusic();
+    initializeGame();
   });
 
   initializeGame();
