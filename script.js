@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const movesDisplay = document.getElementById("moves");
   const pauseButton = document.getElementById("pause");
   const overlay = document.querySelector(".overlay");
-  const backgroundMusic = document.getElementById("background-music"); 
+  const backgroundMusic = document.getElementById("background-music");
 
   let tiles = [];
   let timerInterval;
@@ -73,17 +73,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const validMoves = getValidMoves(emptyTileIndex);
 
         if (validMoves.includes(i)) {
-          [tiles[emptyTileIndex], tiles[i]] = [tiles[i], tiles[emptyTileIndex]];
-          moveCount++;
-          movesDisplay.textContent = `Moves: ${moveCount}`;
-          renderTiles();
-          checkPuzzleSolved();
+          // Add animation class to the clicked tile
+          tileElement.classList.add("moving");
+
+          // Swap tiles with a delay for the animation
+          setTimeout(() => {
+            [tiles[emptyTileIndex], tiles[i]] = [tiles[i], tiles[emptyTileIndex]];
+            moveCount++;
+            movesDisplay.textContent = `Moves: ${moveCount}`;
+            renderTiles();
+            checkPuzzleSolved();
+          }, 200);
         }
       });
 
       grid.appendChild(tileElement);
     }
   }
+
 
   function getValidMoves(emptyTileIndex) {
     const validMoves = [];
@@ -121,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showCongratulatoryMessage() {
-    const modal = document.getElementById("modal"); 
+    const modal = document.getElementById("modal");
     const message = document.getElementById("congrats-message");
 
     // Update the message content
@@ -134,17 +141,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const backgroundMusic = document.getElementById("background-music");
     const congratsMusic = document.getElementById("congrats-music");
 
-    backgroundMusic.pause(); 
-    congratsMusic.play();     
+    backgroundMusic.pause();
+    congratsMusic.play();
 
     // Add an event listener to the close button to close the modal
     const closeBtn = modal.querySelector(".close-btn");
     closeBtn.addEventListener("click", () => {
-      modal.style.display = "none"; 
-      initializeGame(); 
-      congratsMusic.pause(); 
+      modal.style.display = "none";
+      initializeGame();
+      congratsMusic.pause();
       congratsMusic.currentTime = 0;
-      backgroundMusic.play(); 
+      backgroundMusic.play();
     });
   }
 
@@ -173,12 +180,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function playMusic() {
-    backgroundMusic.play(); 
+    backgroundMusic.play();
   }
 
   function stopMusic() {
-    backgroundMusic.pause(); 
-    backgroundMusic.currentTime = 0; 
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
   }
 
   pauseButton.addEventListener("click", () => {
