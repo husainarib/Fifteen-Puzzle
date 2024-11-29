@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function shuffleTiles() {
     if (isPaused) return;
+
+    const instruction = document.getElementById("instruction");
+    if (instruction) instruction.style.display = "none";
+
     tiles = shuffle([...tiles]);
     renderTiles();
     resetTimer();
