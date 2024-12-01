@@ -7,13 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const pauseButton = document.getElementById("pause");
   const overlay = document.querySelector(".overlay");
   const backgroundMusic = document.getElementById("background-music");
+  let gameStarted = false;
 
   let tiles = [];
   let timerInterval;
   let secondsElapsed = 0;
   let moveCount = 0;
   let isPaused = false;
-  let solvedState = [...Array(15).keys()].map(x => x + 1).concat(""); // Solved state [1, 2, 3, ..., 15, ""]
+  let solvedState = [...Array(15).keys()].map((x) => x + 1).concat(""); // Solved state [1, 2, 3, ..., 15, ""]
 
   function initializeGame() {
     tiles = [...solvedState]; // Reset to solved state
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     resetTimer();
     resetMoves();
     stopMusic();
+    gameStarted = false;
   }
 
   function shuffleTiles() {
@@ -35,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     resetMoves();
     startTimer();
     playMusic(); // Start playing music when the game starts
+    gameStarted = true;
   }
 
   function shuffle(array) {
@@ -71,30 +74,34 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       tileElement.addEventListener("click", () => {
-        if (isPaused || tiles[i] === "") return;
+        if (!gameStarted || isPaused || tiles[i] === "") return;
 
         const emptyTileIndex = tiles.indexOf("");
         const validMoves = getValidMoves(emptyTileIndex);
 
         if (validMoves.includes(i)) {
-          // Add animation class to the clicked tile
-          tileElement.classList.add("moving");
+          tileElement.classList.add("moving", "bounce");
 
-          // Swap tiles with a delay for the animation
           setTimeout(() => {
-            [tiles[emptyTileIndex], tiles[i]] = [tiles[i], tiles[emptyTileIndex]];
+            [tiles[emptyTileIndex], tiles[i]] = [
+              tiles[i],
+              tiles[emptyTileIndex],
+            ];
             moveCount++;
             movesDisplay.textContent = `Moves: ${moveCount}`;
             renderTiles();
+
+            // Remove the animation classes after the animation is complete
+            tileElement.classList.remove("moving", "bounce");
+
             checkPuzzleSolved();
-          }, 200);
+          }, 400);
         }
       });
 
       grid.appendChild(tileElement);
     }
   }
-
 
   function getValidMoves(emptyTileIndex) {
     const validMoves = [];
@@ -104,9 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Directions:
     const directions = [
       [-1, 0], // up
-      [1, 0],  // down
+      [1, 0], // down
       [0, -1], // left
-      [0, 1],  // right
+      [0, 1], // right
     ];
 
     for (const [dx, dy] of directions) {
@@ -158,7 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
       backgroundMusic.play();
     });
   }
-
 
   function startTimer() {
     if (timerInterval) clearInterval(timerInterval);
@@ -217,4 +223,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initializeGame();
 });
-
