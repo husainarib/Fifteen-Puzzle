@@ -145,11 +145,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update the message content
     message.textContent = `It took you ${secondsElapsed} seconds and ${moveCount} moves to complete the puzzle!`;
 
+ 
+
     // Show the modal
     modal.style.display = "block"; // Show modal
 
     // Stop the background music and play the congrats music
     const backgroundMusic = document.getElementById("background-music");
+    
     const congratsMusic = document.getElementById("congrats-music");
 
     backgroundMusic.pause();
@@ -191,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function playMusic() {
     backgroundMusic.play();
+    backgroundMusic.volume = 0.1;
   }
 
   function stopMusic() {
